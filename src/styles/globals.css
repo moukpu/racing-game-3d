@@ -1,8 +1,11 @@
-@import "tailwindcss";
-@import "../src/styles/tokens.css";
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ============================================================
-   Base resets — adapted from src/styles/globals.css for Tailwind v4.
+   Base resets
    ============================================================ */
 *,
 *::before,
@@ -27,13 +30,14 @@ body {
 
 body {
   min-height: 100dvh;
-  background: var(--grad-hero), var(--color-bg-0);
+  background:
+    var(--grad-hero),
+    var(--color-bg-0);
   background-attachment: fixed;
   overflow-x: hidden;
-  overscroll-behavior: none;
 }
 
-/* Mono digits — HUD numbers (speed, lap, time). */
+/* Mono digits — for HUD numbers (speed, lap, time). */
 .font-mono,
 [data-mono] {
   font-family: var(--font-mono);
@@ -41,17 +45,20 @@ body {
   letter-spacing: var(--tracking-wider);
 }
 
+/* Selection styling */
 ::selection {
   background: var(--color-accent);
   color: var(--color-bg-0);
 }
 
+/* Focus ring — accessible & visible on dark surfaces */
 :where(button, a, [role="button"], [tabindex]):focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
+/* Reduce motion for users that ask */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -63,6 +70,8 @@ body {
   }
 }
 
+/* Optional subtle CRT scanline texture for menu screens.
+   Apply via class="scanlines". Cheap, GPU-only. */
 .scanlines::after {
   content: "";
   position: absolute;
@@ -73,6 +82,7 @@ body {
   opacity: 0.5;
 }
 
+/* HUD glass card — reused by SpeedoMeter / LapCounter. */
 .hud-card {
   background: var(--hud-card-bg);
   border: 1px solid var(--hud-card-bd);
@@ -80,9 +90,4 @@ body {
   backdrop-filter: var(--hud-card-blur);
   -webkit-backdrop-filter: var(--hud-card-blur);
   box-shadow: var(--shadow-2);
-}
-
-.car-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-line-strong);
 }
