@@ -20,13 +20,27 @@ import type {
   TrackConfig,
   Vec3,
 } from "@/types/game";
-import type {
-  ApplyEngineForceArgs,
-  ApplySteeringArgs,
-  CarKinematics,
-  CheckLapArgs,
-  CheckLapResult,
-} from "@/lib/physics";
+import type { CarControls, CarKinematics, CheckLapArgs, CheckLapResult } from "@/lib/physics";
+
+/**
+ * The Misha-authored signatures in `physics.ts` use an opaque
+ * `RigidBodyHandle` brand to keep WASM out of edge contexts. Our impl runs
+ * inside the Canvas, so we accept the real Rapier body directly.
+ */
+interface ApplyForceCommonArgs {
+  readonly body: RapierRigidBody;
+  readonly car: CarConfig;
+  readonly kinematics: CarKinematics;
+  readonly dt: number;
+}
+
+interface ApplyEngineForceArgs extends ApplyForceCommonArgs {
+  readonly controls: Pick<CarControls, "throttle" | "brake" | "handbrake">;
+}
+
+interface ApplySteeringArgs extends ApplyForceCommonArgs {
+  readonly controls: Pick<CarControls, "steer">;
+}
 
 /* ─────────────── kinematic sampling ─────────────── */
 
@@ -58,7 +72,7 @@ export function applyEngineForce({
   controls,
   kinematics,
   dt,
-}: ApplyEngineForceArgs & { readonly body: RapierRigidBody }): void {
+}: ApplyEngineForceArgs): void {
   const [fx, , fz] = kinematics.forward;
   const fwdSpeed = kinematics.velocity[0] * fx + kinematics.velocity[2] * fz;
 
@@ -95,7 +109,7 @@ export function applySteering({
   controls,
   kinematics,
   dt,
-}: ApplySteeringArgs & { readonly body: RapierRigidBody }): void {
+}: ApplySteeringArgs): void {
   const angle = car.steeringAngleRad ?? 0.55;
   // Low-speed steering is reduced (avoids in-place spin); ramp from 0.2 at v=0
   // to 1.0 at v=10 m/s.

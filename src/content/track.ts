@@ -35,7 +35,7 @@ const WIDTH = 12;
 
 const segments: readonly TrackSegment[] = WP.map((from, i) => ({
   from,
-  to: WP[(i + 1) % WP.length],
+  to: WP[(i + 1) % WP.length]!,
 }));
 
 export const track: TrackConfig = {

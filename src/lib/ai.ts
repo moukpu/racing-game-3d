@@ -93,14 +93,15 @@ export function botUpdate({
 
   // 1) Advance index if we are close enough to the current target.
   let idx = state.nextWaypointIdx % N;
-  if (sqDistXZ(kinematics.position, waypoints[idx]) < WAYPOINT_REACH_RADIUS ** 2) {
+  const currentWp = waypoints[idx]!;
+  if (sqDistXZ(kinematics.position, currentWp) < WAYPOINT_REACH_RADIUS ** 2) {
     idx = (idx + 1) % N;
   }
 
   // 2) Pick a look-ahead point: skip K waypoints based on bot.lookAheadM / segment length.
-  const segLenApprox = Math.sqrt(sqDistXZ(waypoints[idx], waypoints[(idx + 1) % N])) || 1;
+  const segLenApprox = Math.sqrt(sqDistXZ(waypoints[idx]!, waypoints[(idx + 1) % N]!)) || 1;
   const lookAheadSteps = Math.max(1, Math.round((bot.lookAheadM ?? 14) / segLenApprox));
-  const target = waypoints[(idx + lookAheadSteps - 1) % N];
+  const target = waypoints[(idx + lookAheadSteps - 1) % N]!;
 
   // 3) Desired heading & steering decision.
   const desired = normalizeXZ([

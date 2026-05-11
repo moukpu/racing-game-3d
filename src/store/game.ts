@@ -22,7 +22,8 @@ export interface RacerRow {
   readonly id: string;
   readonly kind: RacerKind;
   readonly name: string;
-  readonly carId: string;
+  /** Mutable: player picks a car between races. */
+  carId: string;
   /** Last sampled speed in m/s (HUD converts to km/h). */
   speed: number;
   lap: LapInfo;

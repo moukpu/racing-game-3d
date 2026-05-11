@@ -17,7 +17,7 @@ const SUFFIX = ["th", "st", "nd", "rd"];
 
 function ordinal(n: number): string {
   const v = Math.abs(n) % 100;
-  return n + (SUFFIX[(v - 20) % 10] || SUFFIX[v] || SUFFIX[0]);
+  return n + (SUFFIX[(v - 20) % 10] ?? SUFFIX[v] ?? "th");
 }
 
 /**
