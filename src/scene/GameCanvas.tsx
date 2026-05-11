@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { Sky } from "@react-three/drei";
 import { Physics, type RapierRigidBody } from "@react-three/rapier";
-import { Bloom, EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
+import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 
 import { bots } from "@/content/bots";
 import { carsById } from "@/content/cars";
@@ -159,10 +159,9 @@ export function GameCanvas() {
         <CameraRigBridge handle={playerRef} />
       </Suspense>
 
-      <EffectComposer multisampling={0} enableNormalPass={false}>
-        <Bloom intensity={0.45} luminanceThreshold={0.65} luminanceSmoothing={0.2} mipmapBlur />
+      <EffectComposer multisampling={4} enableNormalPass>
+        <Bloom intensity={0.35} luminanceThreshold={0.85} luminanceSmoothing={0.2} mipmapBlur />
         <Vignette eskil={false} offset={0.2} darkness={0.8} />
-        <SMAA />
       </EffectComposer>
     </Canvas>
   );
